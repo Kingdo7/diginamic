@@ -35,7 +35,7 @@ class Tag(models.Model):
 
 class Question(models.Model):
 
-    author = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True, related_name='auteur')
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='auteur')
     tag = models.ManyToManyField(Tag)
     date_creation = models.DateTimeField(auto_now_add=True)
     title = models.CharField(max_length=150)
