@@ -1,10 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+
+{% load crispy_forms_tags %}
+
+{% load static %}
+
+<H4> Questions </H4>
+
+<a href="{% url 'forum:Question' %} "> Vous avez une question ? </a>
+{% block container %}
+
+    <div class="container">
+        <div class="row">
+
+            <!-- {% for question in Questions %}  Trouver ou sont stockés les quesitons pour cette partie
+                {% include 'forum/templates/question_affichage.html' %}
+            {% endfor %} -->
+        </div>
+    </div>
+
+{% endblock %}
+
