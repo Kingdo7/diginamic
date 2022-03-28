@@ -124,3 +124,21 @@ class AnswerVote(models.Model):
         else:
             self.slug = slugify(get_random_string(12))
             super(AnswerVote, self).save(*args, **kwargs)
+
+
+
+class Create_Question(models.Model):
+    title = models.CharField(max_length=100)
+    question = models.CharField(max_length=500)
+
+
+class Details_Question(models.Model):
+    question = models.ForeignKey(Create_Question, on_delete=models.CASCADE, related_name = "question")
+    #answer = models.ForeignKey(Details_Question, on_delete=models.CASCADE, related_name = "answer")
+
+    answer = models.CharField(max_length=1200)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.message
+
