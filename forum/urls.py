@@ -6,6 +6,8 @@ app_name = 'forum'
 
 
 urlpatterns = [
-    path("Create_Question/", views.Create_question, name = "Question"),
-    path("", views.ListView.as_view(), name='feed')
+    path("create/", views.Create, name = "Question"),
+    path("<str:id>/update", views.Update, name="update"),
+    path("details/<str:id>", views.Details, name="details"),
+    path("", views.List, name='feed'),
 ]
