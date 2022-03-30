@@ -1,58 +1,49 @@
 from django.http import HttpResponse
-from django.shortcuts import render
-from .models import Create_Question
+from django.shortcuts import render, HttpResponseRedirect, get_object_or_404
+from .models import Question_model
 from .forms import CreateQuestion
-from django.views.generic import CreateView, View, DetailView, ListView
 from django.urls import reverse_lazy
 from django.contrib import messages
 
 # Create your views here.
+def Create(request):
+    html_template = "forum/templates/Question.html"
+    context = {}
+    form = CreateQuestion(request.POST or None)
+    if form.is_valid():
+        form.save()
 
-## Voir comment améliorer l'affichage du titre et de la question
-## Ajouter le Tag
-def Create_question(request):
-    html_template = 'forum/templates/Question.html'
+        return HttpResponseRedirect("/")
 
-    if request.method == "POST" :
-        form = CreateQuestion(request.POST)
-    else :
-        form = CreateQuestion()
-
-    context = {'form':form}
+    context['form'] = form
     return render(request, html_template, context)
 
-class Create_Question(CreateView):
-    html_template = 'forum/templates/Question.html'
-    success_url = reverse_lazy('forum:feed')
 
-    def get(self,request):
-        context = {}
-        context['form'] = CreateQuestion
-        return render(request, self.html_template, context)
+def List(request):
+    html_template = "forum/templates/Feed.html"
+    context = {}
+    context['dataset'] = Question_model.objects.all()
 
-    def POST(self, request, **kwargs):
-        context = {}
-        context['form'] = CreateQuestion
-        title = request.POST['title']
-        question = request.POST['question']
-
-        if title == '':
-            messages.error(request, "Vous n'avez pas renseigné de titre")
-        elif question == '':
-            messages.error(request, "Vous n'avez pas renseigné votre quesiton")
-
-        return render(request, self.html_template, context)
+    return render(request, html_template, context)
 
 
-class feed(ListView):
-    html_template = 'forum/templates/Feed.html'
-    model = CreateQuestion
-    paginate_by = 8
-    context_object_name = "Questions"
-
-class Detail_View(DetailView):
+def Details(request, id):
     html_template = "forum/templates/Detail.html"
-    slug_field = 'id'
-    slug_url_kwarg = 'question_id'
-    queryset = CreateQuestion.objects.all()
-    context_object_name = 'question'
+    context = {}
+    context['data'] = Question_model.objects.get(id = id)
+    return render(request, html_template, context)
+
+
+def Update(request, id):
+    html_template = "forum/templates/Update.html"
+    context = {}
+    obj = get_object_or_404(Question_model, id = id )
+    form = CreateQuestion(request.POST or None, instance=obj)
+
+    if form.is_valid():
+        form.save()
+        return HttpResponseRedirect("/" + id)
+
+    context['form'] = form
+
+    return render(request, html_template, context)
