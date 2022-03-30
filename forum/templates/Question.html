@@ -9,11 +9,7 @@
 <form action = "" method="POST">
     {% csrf_token %}
     {{ form.as_p }}
-    <h3> Tag </h3>
-    <br> <button type="submit"> Envoyer </button>
+    <br>
+    <input type="submit" value = "Envoyer">
+    <a href = "{% url 'forum:feed' %}" > <input type="button" value = "Retour à l'accueil"> </a>
 </form>
-
-<!-- ajouer le tag dans la vue -->
-
-
-

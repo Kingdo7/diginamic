@@ -6,16 +6,16 @@
 <H4> Questions </H4>
 
 <a href="{% url 'forum:Question' %} "> Vous avez une question ? </a>
+<br>
+<br>
 {% block container %}
 
-    <div class="container">
-        <div class="row">
-
-            <!-- {% for question in Questions %}  Trouver ou sont stockés les quesitons pour cette partie
-                {% include 'forum/templates/question_affichage.html' %}
-            {% endfor %} -->
-        </div>
+    <div class="container" >
+            {% for data in dataset %}
+                <div class="click" onclick="">
+                    {% include 'forum/templates/question_affichage.html' %}
+                </div>
+            {% endfor %}
     </div>
 
 {% endblock %}
-
