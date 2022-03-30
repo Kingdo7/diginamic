@@ -1,7 +1,8 @@
 from django.forms import ModelForm
-from .models import Create_Question
+from .models import Question_model
 
 class CreateQuestion(ModelForm):
     class Meta :
-        model = Create_Question
+        model = Question_model
         fields = ['title', 'question']
+
