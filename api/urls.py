@@ -1,5 +1,6 @@
 from django.urls import path
 from rest_framework import routers
+from rest_framework_simplejwt import views as jwt_views
 
 from .views import (
     HelloView,
@@ -31,8 +32,10 @@ app_name = 'api'
 
 
 urlpatterns = [
-    #Obtenir toute la liste des questions
 
+
+
+    #Obtenir toute la liste des questions
     path('hello/', HelloView.as_view(), name='hello'),
     #path('auth/login/', Signup.as_view(), name="signup"),
     path('questions/', QuestionListAPI.as_view(), name="question-list"),

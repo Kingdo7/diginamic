@@ -34,6 +34,8 @@ class QuestionModelSerializer(serializers.ModelSerializer):
         fields = ['title', 'content', 'tag']
         extra_kwargs = {'tag': {'required': True}}
 
+
+
     def create(self, validated_data):
         tag = validated_data.pop('tag')
         try:
@@ -49,10 +51,7 @@ class QuestionModelSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
-    def to_representation(self, obj):
-        return {
-            "tag": obj.tag.title
-        }
+
 
 
 class AnswerModelSerializer(ModelSerializer):

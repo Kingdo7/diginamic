@@ -13,9 +13,25 @@ from forum.models import Question, Answer, Tag
 from account.models import  Profile
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
+from django.views.generic import TemplateView
 
 
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
 
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+
+        token['username'] = user.username
+        return token
+
+
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
 
 
 
@@ -31,20 +47,26 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 
 #models.view et créer des truc dedans
 class HelloView(APIView):
-    permission_classes = (IsAuthenticated,)             # <-- And here
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request):
-        content = {'message': 'Hello, World!'}
+        content = {'message': 'Hello, GeeksforGeeks'}
         return Response(content)
+
+
 
 
 class QuestionListAPI(ListAPIView):
     queryset = Question.objects.all()
     serializer_class = QuestionModelSerializer
+
 # Enelver le null dans models pour question. Ca va faire un problme not nullc onstraint mais c'ets normal car il faut récupérer via token, l'id de user et faire l'ajout quand une quesiton est crée.
 class QuestionCreateAPI(CreateAPIView):
     queryset = Question.objects.all()
     serializer_class = QuestionModelSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(profile=self.request.user.objects.all())
 
 # A Faire et modifier pour la prochaine fois
 class QuestionDetailAPI(RetrieveAPIView):
@@ -72,6 +94,9 @@ class QuestionAnswersListAPI(ListAPIView):
 class AnswerCreateAPI(CreateAPIView):
     queryset = Answer.objects.all()
     serializer_class = AnswerModelSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(profile=self.request.user.objects.all())
 
 
 class AnswerDetailAPI(RetrieveAPIView):

@@ -37,7 +37,7 @@ from . import forms
 #
 #    return render(request, 'templates/signup.html', context = {'form' : form})
 class Index(TemplateView):
-    template_name = 'home.html'
+    template_name = 'account/home.html'
 
 
 class UserCreateView(View):
@@ -82,7 +82,7 @@ class UserCreateView(View):
 
 
 class UserLoginView(View):
-    html_template = 'login.html'
+    html_template = 'account/login.html'
 
     def get(self, request):
         context = {}
