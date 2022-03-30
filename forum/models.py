@@ -126,19 +126,33 @@ class AnswerVote(models.Model):
             super(AnswerVote, self).save(*args, **kwargs)
 
 
-
-class Create_Question(models.Model):
+class Question_model(models.Model):
     title = models.CharField(max_length=100)
-    question = models.CharField(max_length=500)
-
-
-class Details_Question(models.Model):
-    question = models.ForeignKey(Create_Question, on_delete=models.CASCADE, related_name = "question")
-    #answer = models.ForeignKey(Details_Question, on_delete=models.CASCADE, related_name = "answer")
-
+    question = models.TextField()
     answer = models.CharField(max_length=1200)
     timestamp = models.DateTimeField(auto_now_add=True)
+    author = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True, related_name="Author")
+    tag = models.ManyToManyField(Tag)
+    slug = models.SlugField(null=True, blank=True)
+
+    #visit_counter = models.PositiveIntegerField(default=0)
+    #liked = models.ManyToManyField(User)
 
     def __str__(self):
-        return self.message
+        return str(self.title) or ""
+
+
+    def get_absolute_url(self):
+        return reverse('forum:details',
+                       kwargs={'id': self.id}
+                       )
+
+    def save(self, *args, **kwargs):
+        if self.slug:
+            super(Question_model, self).save(*args, **kwargs)
+        else:
+            self.slug = slugify(self.title + get_random_string(9))
+            super(Question_model, self).save(*args, **kwargs)
+
+
 
