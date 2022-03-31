@@ -6,3 +6,7 @@ class CreateQuestion(ModelForm):
         model = Question_model
         fields = ['title', 'question']
 
+class Details(ModelForm):
+    class Meta :
+        model = Question_model
+        fields = ['answer']
