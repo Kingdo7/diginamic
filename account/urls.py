@@ -9,7 +9,13 @@ from .views import (
     Index,
     ProfileUpdateView,
     ProfileListView,
+    FriendListView,
     ProfileDetailsView,
+    FollowSetter,
+
+    AddFriendRelationship,
+    RemoveFriendRelationship,
+
 
 )
 
@@ -17,9 +23,14 @@ from .views import (
 app_name = 'account'
 
 urlpatterns = [
+    path('add-friend/<int:pk>/', AddFriendRelationship, name = "add-friend"),
+    path('remove-friend/<int:pk>/', RemoveFriendRelationship, name = "remove-friend"),
 
+    path('follow-setter/<int:pk>/', FollowSetter, name = "follow-setter"),
     path('auth/profile/<int:pk>/update/', ProfileUpdateView.as_view(), name = "profile-update"),
     path('auth/profile/<int:pk>/details/', ProfileDetailsView.as_view(), name = "profile-details"),
+
+    path('auth/friend/list/', FriendListView.as_view(), name = "friend-list"),
     path('auth/profile/list/', ProfileListView.as_view(), name = "profile-list"),
     path('auth/register/', UserCreateView.as_view(), name = "register"),
     path('auth/login/', UserLoginView.as_view(), name="signup"),

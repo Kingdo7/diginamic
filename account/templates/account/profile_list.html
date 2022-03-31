@@ -8,16 +8,30 @@
 
     <div class="row m-5">
         {% for each in object_list %}
+        {% if each.user != request.user %}
 
             <div class="col-3 p-3">
+
                 <div class="card">
+
                       <div class="card-body">
-                        <h5 class="card-title">{{ each.user }}</h5>
-                        <a href="{% url 'account:profile-details' pk=each.pk %}" class="btn btn-primary">consulter</a>
+
+                            <h5 class="card-title">{{ each.user }}</h5>
+                            <a href="{% url 'account:profile-details' pk=each.pk %}" class="btn btn-primary">consulter</a>
+                            {% if request.user in each.follower.all %}
+                                <a href="{% url 'account:follow-setter' pk=each.pk %}" class="btn btn-danger">Unfollow</a>
+                            {% else %}
+                                <a href="{% url 'account:follow-setter' pk=each.pk %}" class="btn btn-success">Follow</a>
+                            {% endif %}
+                            <a href="{% url 'account:add-friend' pk=each.pk %}" class="btn btn-primary">Ajout en amis</a>
+
                       </div>
+
                 </div>
+
             </div>
 
+        {% endif %}
         {% endfor %}
     </div>
 
