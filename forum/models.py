@@ -9,7 +9,6 @@ from django.utils.text import slugify
 
 # Create your models here.
 from django.db.models import DateTimeField
-from ckeditor.fields import RichTextField
 from account.models import Profile
 
 class Tag(models.Model):
@@ -129,7 +128,7 @@ class AnswerVote(models.Model):
 class Question_model(models.Model):
     title = models.CharField(max_length=100)
     question = models.TextField()
-    answer = models.CharField(max_length=1200)
+    answer = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True, related_name="Author")
     tag = models.ManyToManyField(Tag)
@@ -144,7 +143,7 @@ class Question_model(models.Model):
 
     def get_absolute_url(self):
         return reverse('forum:details',
-                       kwargs={'id': self.id}
+                       kwargs={'id': self.slug}
                        )
 
     def save(self, *args, **kwargs):
