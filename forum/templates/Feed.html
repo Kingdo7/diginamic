@@ -1,0 +1,21 @@
+
+{% load crispy_forms_tags %}
+
+{% load static %}
+
+<H4> Questions </H4>
+
+<a href="{% url 'forum:Question' %} "> Vous avez une question ? </a>
+<br>
+<br>
+{% block container %}
+
+    <div class="container" >
+            {% for data in dataset %}
+                <a href="{% url 'forum:details' id=data.id %}">
+                    {% include 'forum/templates/question_affichage.html' %}
+                </a>
+            {% endfor %}
+    </div>
+
+{% endblock %}
