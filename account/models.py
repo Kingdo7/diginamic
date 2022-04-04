@@ -2,6 +2,7 @@ from django.db import models
 
 # Create your models here.
 
+from django.urls import reverse
 from django.contrib.auth.models import User
 from django.utils.text import slugify
 from django.utils.crypto import get_random_string
@@ -23,7 +24,7 @@ class Profile(models.Model):
         return str(self.user) or ""
 
     def get_absolute_url(self):
-        return Profile('account:profile-detail', kwargs={'slug': self.slug})
+        return reverse('account:profile-detail', kwargs={'slug': self.slug})
 
     def get_follower_list_count(self):
         return len(self.follower.all())
@@ -31,11 +32,14 @@ class Profile(models.Model):
     def get_friend_list_count(self):
         return len(self.friendlist.all())
 
+    def get_waiting_list(self):
+        return self.waitinglist.all()
+
     def save(self, *args, **kwargs):
         if self.slug:
             super(Profile, self).save(*args, **kwargs)
         else:
-            self.slug = slugify(self.titre + get_random_string(9))
+            self.slug = slugify(str(self.user) + get_random_string(9))
             super(Profile, self).save(*args, **kwargs)
 
 
@@ -47,15 +51,15 @@ class Friend(models.Model):
     slug = models.SlugField(null=True, blank=True)
 
     def __str__(self):
-        return str(self.user) or ""
+        return str(self.profile) or ""
 
     def get_absolute_url(self):
-        return Profile('account:friend-detail', kwargs={'slug': self.slug})
+        return reverse('account:profile-detail', kwargs={'slug': self.slug})
 
     def save(self, *args, **kwargs):
         if self.slug:
             super(Friend, self).save(*args, **kwargs)
         else:
-            self.slug = slugify(get_random_string(20))
+            self.slug = slugify(str(self.profile) + get_random_string(9))
             super(Friend, self).save(*args, **kwargs)
 

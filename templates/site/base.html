@@ -9,22 +9,88 @@
 </head>
 <body>
 
-<div class="mt-5 pt-5">
-{% if messages %}
-    {% for message in messages %}
-    <div class="{{ message.tags }} alert-dismissible fade show" role="alert">
-      {{ message }}
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
+    {% include "site/navbar.html" %}
+    <div class="main">
+
+            {% include "site/sidebar.html" %}
+
+            {% block content %}
+            {% endblock content %}
+
+            {% include "site/aside.html" %}
+
     </div>
-    {% endfor %}
-{% endif %}
-</div>
+    <div class=" pt-5">
 
-    <h1> Ceci est une phrase </h1>
-        {% block content %}
+        {% if messages %}
+            {% for message in messages %}
+            <div class="{{ message.tags }} alert-dismissible fade show" role="alert">
+              {{ message }}
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            {% endfor %}
+        {% endif %}
 
-        {% endblock content %}
+       <!-- <div class="row">
+            <div class="col-10">
+            </div>
+            <div class="col-2">
+            </div>
+        </div>
+    </div> -->
+
+
 </body>
+<script>
+
+let cards = document.querySelectorAll('.card');
+    for (let i = 0; i < cards.length; i++) {
+      let card = cards[i];
+      let cardToggle = function () {
+        setTimeout(() => {
+            this.classList.add('active');
+        }, 600);
+      };
+      card.addEventListener('mouseenter', cardToggle);
+    };
+
+let cardsAnswered = document.querySelectorAll('.card');
+    for (let i = 0; i < cardsAnswered.length; i++) {
+      let cardAns = cardsAnswered[i];
+      let cardAnswer = function () {
+        setTimeout(() => {
+            this.classList.remove('active');
+        }, 600);
+      };
+      cardAns.addEventListener('mouseleave', cardAnswer);
+    };
+
+
+let logs = document.querySelectorAll('.account');
+for (let i = 0; i < logs.length; i++) {
+    let log = logs[i];
+    let logsToggle = function () {
+    this.classList.toggle('active_logs');
+    };
+    log.addEventListener('click', logsToggle);
+};
+
+let otherTargetDiv = document.querySelector(".second");
+let targetDiv = document.querySelector(".first");
+let bttn = document.getElementById("toggler");
+let btn = document.getElementById("toggle");
+
+btn.onclick = function () {
+    targetDiv.style.display = "flex";
+    otherTargetDiv.style.display = "none";
+}
+bttn.onclick = function () {
+
+      otherTargetDiv.style.display = "flex";
+      targetDiv.style.display = "none";
+  };
+
+</script>
 </html>

@@ -38,20 +38,7 @@ from . import forms
 #
 #    return render(request, 'templates/signup.html', context = {'form' : form})
 class Index(TemplateView):
-    template_name = 'home.html'
-
-
-def FriendSetter(request, *args, **kwargs):
-    priorURL = request.META.get('HTTP_REFERER')
-    qs = Profile.objects.get(id=kwargs['pk'])
-    # cliq sur test 1 profile = test_1
-    #
-    if qs.user not in request.user.friendlist.friend.all():
-        request.user.friendlist.friend.add(qs.user)
-    else:
-        request.user.friendlist.friend.remove(qs.user)
-
-    return redirect(priorURL)
+    template_name = 'account/home.html'
 
 
 def FollowSetter(request, *args, **kwargs):
@@ -59,7 +46,7 @@ def FollowSetter(request, *args, **kwargs):
     qs = Profile.objects.get(id=kwargs['pk'])
     # cliq sur test 1 profile = test_1
     #
-    if qs.user not in request.user.userprofile.friendlist.all():
+    if qs.user not in request.user.userprofile.following.all():
         request.user.userprofile.following.add(qs.user)
         qs.follower.add(request.user)
     else:
@@ -111,7 +98,7 @@ class UserCreateView(View):
 
 
 class UserLoginView(View):
-    html_template = 'login.html'
+    html_template = 'account/login.html'
 
     def get(self, request):
         context = {}
@@ -170,10 +157,6 @@ class ProfileListView(ListView):
     model = Profile
     template_name = "account/profile_list.html"
 
-class FriendListView(ListView):
-    model = Friend
-    template_name = "account/friend_list.html"
-
 class FriendUpdateView(UpdateView):
     model = Friend
     form_class = ProfileUpdateForm
@@ -189,13 +172,17 @@ class FriendCreateView(CreateView):
 
 def AddFriendRelationship(request, *args,**kwargs):
     object = Profile.objects.get(pk=kwargs['pk'])
-    friend_recto = Friend.objects.create(
+    '''friend_recto = Friend.objects.create(
         profile=request.user.userprofile,
         friend=object.user,
     )
     friend_verso = Friend.objects.create(
         profile=object,
         friend=request.user,
+    )'''
+    Friend.objects.create(
+        profile=request.user.userprofile,
+        friend=object.user,
     )
     object.waitinglist.add(request.user)
     url = reverse_lazy('account:profile-list')
@@ -211,10 +198,31 @@ def RemoveFriendRelationship(request, *args, **kwargs):
     return redirect(url)
 
 
-def AcceptedButton(self):
+def AcceptedButton(request, *args, **kwargs):
     # si utilisateur 1 ajoute utilisateur deux
     # dans la page profile /me de l'utilisateur 2
     # on doit avoir la liste des gens qui essaye d'ajouter en amis utilsateur 2
     # je passe les deux relation en accépter is_accepted = True
     # pop de la liste de l'utilisateur 2 le nom de la personne qu'il accepte
+
+    '''
+    object = Profile.objects.get(pk=kwargs['pk'])
+    test1=Friend.objects.get(friend=request.user.userprofile, profile=User.objects.get(slug=kwargs['slug']))
+    test1.is_accepted=True
+    Friend.objects.create(
+        profile=request.user.userprofile,
+        friend=object.user,
+        is_accepted=True,
+    )
+    url = reverse_lazy('account:profile-list')
+    return redirect(url)'''
+    pass
+
+def RefusedButton(request, *args, **kwargs):
+    '''
+    object = Profile.objects.get(pk=kwargs['pk'])
+    test1=Friend.objects.get(friend=request.user.userprofile, profile=User.objects.get(slug=kwargs['slug']))
+    test1.delete()
+    url = reverse_lazy('account:profile-list')
+    return redirect(url)'''
     pass
